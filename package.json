@@ -1,0 +1,18 @@
+{
+  "name": "beyound-css__website-starter-template",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 11478",
+    "build": "vite build",
+    "preview": "vite preview --port 17945"
+  },
+  "browserslist": "> 1%, last 2 versions, Firefox ESR, not dead",
+  "devDependencies": {
+    "postcss-preset-env": "^9.1.0",
+    "sass": "^1.64.1",
+    "vite": "^5.1.4",
+    "vite-plugin-purgecss": "^0.2.12"
+  }
+}
