@@ -1,12 +1,14 @@
 {
-  "name": "beyound-css__website-starter-template",
+  "name": "tm_flixx-app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 11478",
+    "dev": "vite --port 11601",
     "build": "vite build",
-    "preview": "vite preview --port 17945"
+    "preview": "vite preview --port 11899",
+    "build-netlify": "vite build --base=/",
+    "preview-netlify": "vite preview --base=/ --port 11900"
   },
   "browserslist": "> 1%, last 2 versions, Firefox ESR, not dead",
   "devDependencies": {
