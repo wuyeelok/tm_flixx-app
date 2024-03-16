@@ -2,12 +2,11 @@ const global = {
   currentPage: getCurrentPageHTMLFilePath(),
   API_KEY: "7afb6867335b56cd49dfc5b14c686f20",
   API_URL: "https://api.themoviedb.org/3/",
+  API_POSTER_URL: "https://image.tmdb.org/t/p/w500/",
 };
 
 async function displayPopularMovies() {
   const { results } = await fetchAPIData("movie/popular");
-
-  const imageEndPoint = "https://image.tmdb.org/t/p/w500/";
 
   for (let i = 0; i < results.length; i++) {
     const movie = results[i];
@@ -24,7 +23,7 @@ async function displayPopularMovies() {
     let imageSrc = "images/no-image.jpg";
 
     if (movie.poster_path) {
-      imageSrc = `${imageEndPoint}${movie.poster_path}`;
+      imageSrc = `${global.API_POSTER_URL}${movie.poster_path}`;
     }
 
     cardDivEle.innerHTML = `
@@ -45,6 +44,42 @@ async function displayPopularMovies() {
 
     document.getElementById("popular-movies").appendChild(cardDivEle);
   }
+}
+
+async function displayPopularTVShows() {
+  const { results } = await fetchAPIData("tv/popular");
+
+  results.forEach((tvShow) => {
+    const cardDivEle = document.createElement("div");
+    cardDivEle.classList.add("card");
+
+    let imageSrc = "images/no-image.jpg";
+    if (tvShow.poster_path) {
+      imageSrc = `${global.API_POSTER_URL}${tvShow.poster_path}`;
+    }
+
+    const firstAirDate = new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date(tvShow.first_air_date));
+
+    cardDivEle.innerHTML = `<a href="tv-details.html?id=1">
+    <img
+      src="${imageSrc}"
+      class="card-img-top"
+      alt="${tvShow.original_name}"
+    />
+  </a>
+  <div class="card-body">
+    <h5 class="card-title">${tvShow.original_name}</h5>
+    <p class="card-text">
+      <small class="text-muted">Aired: ${firstAirDate}</small>
+    </p>
+  </div>`;
+
+    document.getElementById("popular-shows").appendChild(cardDivEle);
+  });
 }
 
 // Get data from TMDB API
@@ -126,6 +161,7 @@ function init() {
       break;
     case "shows.html":
       console.log("Shows");
+      displayPopularTVShows();
       break;
     case "tv-details.html":
       console.log("TV Details");
