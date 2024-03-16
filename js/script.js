@@ -27,7 +27,7 @@ async function displayPopularMovies() {
     }
 
     cardDivEle.innerHTML = `
-    <a href="movie-details.html?id=1">
+    <a href="movie-details.html?id=${movie.id}">
       <img
         src="${imageSrc}"
         class="card-img-top"
@@ -64,7 +64,7 @@ async function displayPopularShows() {
       day: "2-digit",
     }).format(new Date(show.first_air_date));
 
-    cardDivEle.innerHTML = `<a href="tv-details.html?id=1">
+    cardDivEle.innerHTML = `<a href="tv-details.html?id=${show.id}">
     <img
       src="${imageSrc}"
       class="card-img-top"
