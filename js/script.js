@@ -159,7 +159,6 @@ function init() {
   switch (currentHTMLPage) {
     case "/":
     case "index.html":
-      console.log("home");
       displayPopularMovies();
       break;
     case "movie-details.html":
@@ -169,7 +168,6 @@ function init() {
       console.log("Search");
       break;
     case "shows.html":
-      console.log("Shows");
       displayPopularShows();
       break;
     case "tv-details.html":
