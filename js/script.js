@@ -14,11 +14,28 @@ function getCurrentPageHTMLFilePath() {
   }
 }
 
-function highlightActiveLink(text) {
+function highlightActiveLink() {
   const links = document.querySelectorAll(".nav-link");
 
   for (const link of links) {
-    if (text === link.innerText) {
+    const href = link.getAttribute("href");
+
+    let hrefHTML;
+
+    const lastSlashIndex = href.lastIndexOf("/");
+    if (lastSlashIndex === -1) {
+      hrefHTML = href;
+    } else if (href.length === lastSlashIndex + 1) {
+      hrefHTML = "/";
+    } else {
+      hrefHTML = href.slice(lastSlashIndex + 1);
+    }
+
+    if (
+      hrefHTML === getCurrentPageHTMLFilePath() ||
+      (hrefHTML === "/" && getCurrentPageHTMLFilePath() === "index.html") ||
+      (hrefHTML === "index.html" && getCurrentPageHTMLFilePath() === "/")
+    ) {
       link.classList.add("active");
       break;
     }
@@ -27,8 +44,6 @@ function highlightActiveLink(text) {
 
 function init() {
   const currentHTMLPage = getCurrentPageHTMLFilePath();
-
-  let targetLinkText = "";
 
   switch (currentHTMLPage) {
     case "/":
@@ -42,18 +57,16 @@ function init() {
       console.log("Search");
       break;
     case "shows.html":
-      targetLinkText = "TV Shows";
       console.log("Shows");
       break;
     case "tv-details.html":
       console.log("TV Details");
       break;
     default:
-      targetLinkText = "Movies";
       console.log("Unkown Page");
   }
 
-  highlightActiveLink(targetLinkText);
+  highlightActiveLink();
 }
 
 document.addEventListener("DOMContentLoaded", init);
