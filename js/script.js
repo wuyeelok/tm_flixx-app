@@ -84,8 +84,7 @@ async function displayPopularTVShows() {
 
 // Get data from TMDB API
 async function fetchAPIData(endpoint) {
-  const spinner = document.querySelector(".spinner");
-  spinner.classList.add("show");
+  showSpinner();
 
   const response = await fetch(
     `${global.API_URL}${endpoint}?api_key=${global.API_KEY}&language=en-US`
@@ -100,8 +99,18 @@ async function fetchAPIData(endpoint) {
   } catch (err) {
     console.log(err);
   } finally {
-    spinner.classList.remove("show");
+    hideSpinner();
   }
+}
+
+function showSpinner() {
+  const spinner = document.querySelector(".spinner");
+  spinner.classList.add("show");
+}
+
+function hideSpinner() {
+  const spinner = document.querySelector(".spinner");
+  spinner.classList.remove("show");
 }
 
 function getCurrentPageHTMLFilePath() {
