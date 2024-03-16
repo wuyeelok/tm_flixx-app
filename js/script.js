@@ -2,12 +2,11 @@ const global = {
   currentPage: getCurrentPageHTMLFilePath(),
   API_KEY: "7afb6867335b56cd49dfc5b14c686f20",
   API_URL: "https://api.themoviedb.org/3/",
+  API_POSTER_URL: "https://image.tmdb.org/t/p/w500/",
 };
 
 async function displayPopularMovies() {
   const { results } = await fetchAPIData("movie/popular");
-
-  const imageEndPoint = "https://image.tmdb.org/t/p/w500/";
 
   for (let i = 0; i < results.length; i++) {
     const movie = results[i];
@@ -24,11 +23,11 @@ async function displayPopularMovies() {
     let imageSrc = "images/no-image.jpg";
 
     if (movie.poster_path) {
-      imageSrc = `${imageEndPoint}${movie.poster_path}`;
+      imageSrc = `${global.API_POSTER_URL}${movie.poster_path}`;
     }
 
     cardDivEle.innerHTML = `
-    <a href="movie-details.html?id=1">
+    <a href="movie-details.html?id=${movie.id}">
       <img
         src="${imageSrc}"
         class="card-img-top"
@@ -47,10 +46,45 @@ async function displayPopularMovies() {
   }
 }
 
+async function displayPopularShows() {
+  const { results } = await fetchAPIData("tv/popular");
+
+  results.forEach((show) => {
+    const cardDivEle = document.createElement("div");
+    cardDivEle.classList.add("card");
+
+    let imageSrc = "images/no-image.jpg";
+    if (show.poster_path) {
+      imageSrc = `${global.API_POSTER_URL}${show.poster_path}`;
+    }
+
+    const firstAirDate = new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date(show.first_air_date));
+
+    cardDivEle.innerHTML = `<a href="tv-details.html?id=${show.id}">
+    <img
+      src="${imageSrc}"
+      class="card-img-top"
+      alt="${show.name}"
+    />
+  </a>
+  <div class="card-body">
+    <h5 class="card-title">${show.name}</h5>
+    <p class="card-text">
+      <small class="text-muted">Aired: ${firstAirDate}</small>
+    </p>
+  </div>`;
+
+    document.getElementById("popular-shows").appendChild(cardDivEle);
+  });
+}
+
 // Get data from TMDB API
 async function fetchAPIData(endpoint) {
-  const spinner = document.querySelector(".spinner");
-  spinner.classList.add("show");
+  showSpinner();
 
   const response = await fetch(
     `${global.API_URL}${endpoint}?api_key=${global.API_KEY}&language=en-US`
@@ -65,8 +99,18 @@ async function fetchAPIData(endpoint) {
   } catch (err) {
     console.log(err);
   } finally {
-    spinner.classList.remove("show");
+    hideSpinner();
   }
+}
+
+function showSpinner() {
+  const spinner = document.querySelector(".spinner");
+  spinner.classList.add("show");
+}
+
+function hideSpinner() {
+  const spinner = document.querySelector(".spinner");
+  spinner.classList.remove("show");
 }
 
 function getCurrentPageHTMLFilePath() {
@@ -115,7 +159,6 @@ function init() {
   switch (currentHTMLPage) {
     case "/":
     case "index.html":
-      console.log("home");
       displayPopularMovies();
       break;
     case "movie-details.html":
@@ -125,7 +168,7 @@ function init() {
       console.log("Search");
       break;
     case "shows.html":
-      console.log("Shows");
+      displayPopularShows();
       break;
     case "tv-details.html":
       console.log("TV Details");
