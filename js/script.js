@@ -68,11 +68,11 @@ async function displayPopularShows() {
     <img
       src="${imageSrc}"
       class="card-img-top"
-      alt="${show.original_name}"
+      alt="${show.name}"
     />
   </a>
   <div class="card-body">
-    <h5 class="card-title">${show.original_name}</h5>
+    <h5 class="card-title">${show.name}</h5>
     <p class="card-text">
       <small class="text-muted">Aired: ${firstAirDate}</small>
     </p>
