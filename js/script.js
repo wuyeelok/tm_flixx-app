@@ -2,6 +2,18 @@ const global = {
   currentPage: window.location.pathname,
 };
 
+function getCurrentPageHTMLFilePath() {
+  const fullPathname = window.location.pathname;
+  const lastSlashIndex = fullPathname.lastIndexOf("/");
+
+  if (fullPathname.length === lastSlashIndex + 1) {
+    return "/";
+  } else {
+    const currentPath = window.location.pathname.slice(lastSlashIndex + 1);
+    return currentPath;
+  }
+}
+
 function highlightActiveLink(text) {
   const links = document.querySelectorAll(".nav-link");
 
@@ -14,25 +26,31 @@ function highlightActiveLink(text) {
 }
 
 function init() {
+  const currentHTMLPage = getCurrentPageHTMLFilePath();
+
   let targetLinkText = "";
 
-  switch (true) {
-    case global.currentPage.includes("movie-details.html"):
+  switch (currentHTMLPage) {
+    case "/":
+    case "index.html":
+      console.log("home");
+      break;
+    case "movie-details.html":
       console.log("Movie Details");
       break;
-    case global.currentPage.includes("search.html"):
+    case "search.html":
       console.log("Search");
       break;
-    case global.currentPage.includes("shows.html"):
+    case "shows.html":
       targetLinkText = "TV Shows";
       console.log("Shows");
       break;
-    case global.currentPage.includes("tv-details.html"):
+    case "tv-details.html":
       console.log("TV Details");
       break;
     default:
       targetLinkText = "Movies";
-      console.log("Home");
+      console.log("Unkown Page");
   }
 
   highlightActiveLink(targetLinkText);
