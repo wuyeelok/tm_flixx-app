@@ -7,6 +7,7 @@ export default {
   build: {
     rollupOptions: {
       input: {
+        404: resolve(__dirname, "404.html"),
         index: resolve(__dirname, "index.html"),
         movie_details: resolve(__dirname, "movie-details.html"),
         search: resolve(__dirname, "search.html"),
