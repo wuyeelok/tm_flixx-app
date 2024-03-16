@@ -2,11 +2,40 @@ const global = {
   currentPage: window.location.pathname,
 };
 
-function highlightActiveLink(text) {
+function getCurrentPageHTMLFilePath() {
+  const fullPathname = window.location.pathname;
+  const lastSlashIndex = fullPathname.lastIndexOf("/");
+
+  if (fullPathname.length === lastSlashIndex + 1) {
+    return "/";
+  } else {
+    const currentPath = window.location.pathname.slice(lastSlashIndex + 1);
+    return currentPath;
+  }
+}
+
+function highlightActiveLink() {
   const links = document.querySelectorAll(".nav-link");
 
   for (const link of links) {
-    if (text === link.innerText) {
+    const href = link.getAttribute("href");
+
+    let hrefHTML;
+
+    const lastSlashIndex = href.lastIndexOf("/");
+    if (lastSlashIndex === -1) {
+      hrefHTML = href;
+    } else if (href.length === lastSlashIndex + 1) {
+      hrefHTML = "/";
+    } else {
+      hrefHTML = href.slice(lastSlashIndex + 1);
+    }
+
+    if (
+      hrefHTML === getCurrentPageHTMLFilePath() ||
+      (hrefHTML === "/" && getCurrentPageHTMLFilePath() === "index.html") ||
+      (hrefHTML === "index.html" && getCurrentPageHTMLFilePath() === "/")
+    ) {
       link.classList.add("active");
       break;
     }
@@ -14,28 +43,30 @@ function highlightActiveLink(text) {
 }
 
 function init() {
-  let targetLinkText = "";
+  const currentHTMLPage = getCurrentPageHTMLFilePath();
 
-  switch (true) {
-    case global.currentPage.includes("movie-details.html"):
+  switch (currentHTMLPage) {
+    case "/":
+    case "index.html":
+      console.log("home");
+      break;
+    case "movie-details.html":
       console.log("Movie Details");
       break;
-    case global.currentPage.includes("search.html"):
+    case "search.html":
       console.log("Search");
       break;
-    case global.currentPage.includes("shows.html"):
-      targetLinkText = "TV Shows";
+    case "shows.html":
       console.log("Shows");
       break;
-    case global.currentPage.includes("tv-details.html"):
+    case "tv-details.html":
       console.log("TV Details");
       break;
     default:
-      targetLinkText = "Movies";
-      console.log("Home");
+      console.log("Unkown Page");
   }
 
-  highlightActiveLink(targetLinkText);
+  highlightActiveLink();
 }
 
 document.addEventListener("DOMContentLoaded", init);
