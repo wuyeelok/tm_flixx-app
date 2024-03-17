@@ -93,6 +93,23 @@ async function displayMovieDetails() {
     imageSrc = `${global.API_POSTER_URL}${movieDetailsObj.poster_path}`;
   }
 
+  const releaseDate = new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date(movieDetailsObj.release_date));
+
+  let genresHTML = "";
+  const genres = movieDetailsObj.genres;
+  genres.forEach((genre) => {
+    genresHTML += `<li>${genre.name}</li>`;
+  });
+
+  let homepageURL = "#";
+  if (movieDetailsObj.homepage) {
+    homepageURL = movieDetailsObj.homepage;
+  }
+
   const movieDetailsTopEle = document.createElement("div");
   movieDetailsTopEle.classList.add("details-top");
   movieDetailsTopEle.innerHTML = `<div>
@@ -106,17 +123,15 @@ async function displayMovieDetails() {
   <h2>${movieDetailsObj.title}</h2>
   <p>
     <i class="fas fa-star text-primary"></i>
-    8 / 10
+    ${Number(movieDetailsObj.vote_average).toFixed(0)} / 10
   </p>
-  <p class="text-muted">Release Date: XX/XX/XXXX</p>
+  <p class="text-muted">Release Date: ${releaseDate}</p>
   <p>${movieDetailsObj.overview}</p>
   <h5>Genres</h5>
   <ul class="list-group">
-    <li>Genre 1</li>
-    <li>Genre 2</li>
-    <li>Genre 3</li>
+    ${genresHTML}
   </ul>
-  <a href="#" target="_blank" class="btn">Visit Movie Homepage</a>
+  <a href="${homepageURL}" target="_blank" class="btn">Visit Movie Homepage</a>
 </div>`;
 
   document.getElementById("movie-details").appendChild(movieDetailsTopEle);
