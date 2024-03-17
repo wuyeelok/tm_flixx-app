@@ -169,7 +169,7 @@ async function displayShowDetails() {
 
   // Overlay for background image
   if (show.backdrop_path) {
-    displayBackgroundImage("show", show.backdrop_path);
+    displayBackgroundImage("tv", show.backdrop_path);
   }
 
   let imageSrc = "images/no-image.jpg";
@@ -248,7 +248,7 @@ function displayBackgroundImage(type, backdroundPath) {
 
   if (type === "movie") {
     document.getElementById("movie-details").appendChild(overlayDiv);
-  } else if (type === "show") {
+  } else if (type === "tv") {
     document.getElementById("show-details").appendChild(overlayDiv);
   }
 }
