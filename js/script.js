@@ -2,7 +2,7 @@ const global = {
   currentPage: getCurrentPageHTMLFilePath(),
   API_KEY: "7afb6867335b56cd49dfc5b14c686f20",
   API_URL: "https://api.themoviedb.org/3/",
-  API_POSTER_URL: "https://image.tmdb.org/t/p/w500/",
+  API_POSTER_URL: "https://image.tmdb.org/t/p/w500",
 };
 
 async function displayPopularMovies() {
@@ -80,6 +80,46 @@ async function displayPopularShows() {
 
     document.getElementById("popular-shows").appendChild(cardDivEle);
   });
+}
+
+async function displayMovieDetails() {
+  const urlParamObj = new URLSearchParams(window.location.search);
+  const movieId = urlParamObj.get("id");
+
+  const movieDetailsObj = await fetchAPIData(`movie/${movieId}`);
+
+  let imageSrc = "images/no-image.jpg";
+  if (movieDetailsObj.poster_path) {
+    imageSrc = `${global.API_POSTER_URL}${movieDetailsObj.poster_path}`;
+  }
+
+  const movieDetailsTopEle = document.createElement("div");
+  movieDetailsTopEle.classList.add("details-top");
+  movieDetailsTopEle.innerHTML = `<div>
+  <img
+    src="${imageSrc}"
+    class="card-img-top"
+    alt="${movieDetailsObj.title}"
+  />
+</div>
+<div>
+  <h2>${movieDetailsObj.title}</h2>
+  <p>
+    <i class="fas fa-star text-primary"></i>
+    8 / 10
+  </p>
+  <p class="text-muted">Release Date: XX/XX/XXXX</p>
+  <p>${movieDetailsObj.overview}</p>
+  <h5>Genres</h5>
+  <ul class="list-group">
+    <li>Genre 1</li>
+    <li>Genre 2</li>
+    <li>Genre 3</li>
+  </ul>
+  <a href="#" target="_blank" class="btn">Visit Movie Homepage</a>
+</div>`;
+
+  document.getElementById("movie-details").appendChild(movieDetailsTopEle);
 }
 
 // Get data from TMDB API
@@ -162,7 +202,7 @@ function init() {
       displayPopularMovies();
       break;
     case "movie-details.html":
-      console.log("Movie Details");
+      displayMovieDetails();
       break;
     case "search.html":
       console.log("Search");
