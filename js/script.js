@@ -87,28 +87,28 @@ async function displayMovieDetails() {
   const urlParamObj = new URLSearchParams(window.location.search);
   const movieId = urlParamObj.get("id");
 
-  const movieDetailsObj = await fetchAPIData(`movie/${movieId}`);
+  const movie = await fetchAPIData(`movie/${movieId}`);
 
   let imageSrc = "images/no-image.jpg";
-  if (movieDetailsObj.poster_path) {
-    imageSrc = `${global.API_POSTER_URL}${movieDetailsObj.poster_path}`;
+  if (movie.poster_path) {
+    imageSrc = `${global.API_POSTER_URL}${movie.poster_path}`;
   }
 
   const releaseDate = new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-  }).format(new Date(movieDetailsObj.release_date));
+  }).format(new Date(movie.release_date));
 
   let genresHTML = "";
-  const genres = movieDetailsObj.genres;
+  const genres = movie.genres;
   genres.forEach((genre) => {
     genresHTML += `<li>${genre.name}</li>`;
   });
 
   let homepageURL = "#";
-  if (movieDetailsObj.homepage) {
-    homepageURL = movieDetailsObj.homepage;
+  if (movie.homepage) {
+    homepageURL = movie.homepage;
   }
 
   const movieDetailsTopEle = document.createElement("div");
@@ -117,17 +117,17 @@ async function displayMovieDetails() {
   <img
     src="${imageSrc}"
     class="card-img-top"
-    alt="${movieDetailsObj.title}"
+    alt="${movie.title}"
   />
 </div>
 <div>
-  <h2>${movieDetailsObj.title}</h2>
+  <h2>${movie.title}</h2>
   <p>
     <i class="fas fa-star text-primary"></i>
-    ${Number(movieDetailsObj.vote_average).toFixed(0)} / 10
+    ${Number(movie.vote_average).toFixed(0)} / 10
   </p>
   <p class="text-muted">Release Date: ${releaseDate}</p>
-  <p>${movieDetailsObj.overview}</p>
+  <p>${movie.overview}</p>
   <h5>Genres</h5>
   <ul class="list-group">
     ${genresHTML}
@@ -137,7 +137,7 @@ async function displayMovieDetails() {
   document.getElementById("movie-details").appendChild(movieDetailsTopEle);
 
   let prodCompaniesNames = "";
-  const prodCompanies = movieDetailsObj.production_companies;
+  const prodCompanies = movie.production_companies;
   for (let i = 0; i < prodCompanies.length; i++) {
     if (i + 1 === prodCompanies.length) {
       prodCompaniesNames += prodCompanies[i].name;
@@ -151,17 +151,15 @@ async function displayMovieDetails() {
   movieDetailsBottomEle.innerHTML = `<h2>Movie Info</h2>
   <ul>
     <li><span class="text-secondary">Budget:</span> $${Number(
-      movieDetailsObj.budget
+      movie.budget
     ).toLocaleString("en-US")}</li>
     <li><span class="text-secondary">Revenue:</span> $${Number(
-      movieDetailsObj.revenue
+      movie.revenue
     ).toLocaleString("en-US")}</li>
     <li><span class="text-secondary">Runtime:</span> ${
-      movieDetailsObj.runtime
+      movie.runtime
     } minutes</li>
-    <li><span class="text-secondary">Status:</span> ${
-      movieDetailsObj.status
-    }</li>
+    <li><span class="text-secondary">Status:</span> ${movie.status}</li>
   </ul>
   <h4>Production Companies</h4>
   <div class="list-group">${prodCompaniesNames}</div>`;
