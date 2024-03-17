@@ -3,6 +3,7 @@ const global = {
   API_KEY: "7afb6867335b56cd49dfc5b14c686f20",
   API_URL: "https://api.themoviedb.org/3/",
   API_POSTER_URL: "https://image.tmdb.org/t/p/w500",
+  API_BACKDROP_URL: "https://image.tmdb.org/t/p/original",
 };
 
 async function displayPopularMovies() {
@@ -165,6 +166,16 @@ async function displayMovieDetails() {
   <h4>Production Companies</h4>
   <div class="list-group">${prodCompaniesNames}</div>`;
   document.getElementById("movie-details").appendChild(movieDetailsBottomEle);
+
+  /* if (movieDetailsObj.backdrop_path) {
+    document.querySelector(
+      "body"
+    ).style.backgroundImage = `url(${global.API_BACKDROP_URL}${movieDetailsObj.backdrop_path})`;
+    document.querySelector("body").style.backgroundOrigin = "content-box";
+    document.querySelector("body").style.backgroundPosition = "center";
+    document.querySelector("body").style.backgroundRepeat = "no-repeat";
+    document.querySelector("body").style.backgroundSize = "cover";
+  } */
 }
 
 // Get data from TMDB API
