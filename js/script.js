@@ -133,8 +133,38 @@ async function displayMovieDetails() {
   </ul>
   <a href="${homepageURL}" target="_blank" class="btn">Visit Movie Homepage</a>
 </div>`;
-
   document.getElementById("movie-details").appendChild(movieDetailsTopEle);
+
+  let prodCompaniesNames = "";
+  const prodCompanies = movieDetailsObj.production_companies;
+  for (let i = 0; i < prodCompanies.length; i++) {
+    if (i + 1 === prodCompanies.length) {
+      prodCompaniesNames += prodCompanies[i].name;
+    } else {
+      prodCompaniesNames += prodCompanies[i].name + ", ";
+    }
+  }
+
+  const movieDetailsBottomEle = document.createElement("div");
+  movieDetailsBottomEle.classList.add("details-bottom");
+  movieDetailsBottomEle.innerHTML = `<h2>Movie Info</h2>
+  <ul>
+    <li><span class="text-secondary">Budget:</span> $${Number(
+      movieDetailsObj.budget
+    ).toLocaleString("en-US")}</li>
+    <li><span class="text-secondary">Revenue:</span> $${Number(
+      movieDetailsObj.revenue
+    ).toLocaleString("en-US")}</li>
+    <li><span class="text-secondary">Runtime:</span> ${
+      movieDetailsObj.runtime
+    } minutes</li>
+    <li><span class="text-secondary">Status:</span> ${
+      movieDetailsObj.status
+    }</li>
+  </ul>
+  <h4>Production Companies</h4>
+  <div class="list-group">${prodCompaniesNames}</div>`;
+  document.getElementById("movie-details").appendChild(movieDetailsBottomEle);
 }
 
 // Get data from TMDB API
