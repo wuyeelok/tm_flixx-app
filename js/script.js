@@ -146,11 +146,11 @@ async function displayMovieDetails() {
   movieDetailsBottomEle.classList.add("details-bottom");
   movieDetailsBottomEle.innerHTML = `<h2>Movie Info</h2>
   <ul>
-    <li><span class="text-secondary">Budget:</span> $${movie.budget.toLocaleString(
-      "en-US"
+    <li><span class="text-secondary">Budget:</span> $${addCommasToNumber(
+      movie.budget
     )}</li>
-    <li><span class="text-secondary">Revenue:</span> $${movie.revenue.toLocaleString(
-      "en-US"
+    <li><span class="text-secondary">Revenue:</span> $${addCommasToNumber(
+      movie.revenue
     )}</li>
     <li><span class="text-secondary">Runtime:</span> ${
       movie.runtime
@@ -241,6 +241,10 @@ function highlightActiveLink() {
       break;
     }
   }
+}
+
+function addCommasToNumber(number) {
+  return number.toLocaleString("en-US");
 }
 
 function init() {
