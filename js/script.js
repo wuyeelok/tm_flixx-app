@@ -177,11 +177,11 @@ async function displayShowDetails() {
     imageSrc = `${global.API_POSTER_URL}${show.poster_path}`;
   }
 
-  const firstAirDate = new Intl.DateTimeFormat("en-US", {
+  const lastAirDate = new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-  }).format(new Date(show.first_air_date));
+  }).format(new Date(show.last_air_date));
 
   const genres = show.genres.map((genre) => `<li>${genre.name}</li>`).join("");
 
@@ -205,7 +205,7 @@ async function displayShowDetails() {
     <i class="fas fa-star text-primary"></i>
     ${show.vote_average.toFixed(1)} / 10
   </p>
-  <p class="text-muted">Release Date: ${firstAirDate}</p>
+  <p class="text-muted">Last Air Date: ${lastAirDate}</p>
   <p>${show.overview}</p>
   <h5>Genres</h5>
   <ul class="list-group">${genres}</ul>
