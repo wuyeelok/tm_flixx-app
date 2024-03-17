@@ -150,12 +150,12 @@ async function displayMovieDetails() {
   movieDetailsBottomEle.classList.add("details-bottom");
   movieDetailsBottomEle.innerHTML = `<h2>Movie Info</h2>
   <ul>
-    <li><span class="text-secondary">Budget:</span> $${Number(
-      movie.budget
-    ).toLocaleString("en-US")}</li>
-    <li><span class="text-secondary">Revenue:</span> $${Number(
-      movie.revenue
-    ).toLocaleString("en-US")}</li>
+    <li><span class="text-secondary">Budget:</span> $${movie.budget.toLocaleString(
+      "en-US"
+    )}</li>
+    <li><span class="text-secondary">Revenue:</span> $${movie.revenue.toLocaleString(
+      "en-US"
+    )}</li>
     <li><span class="text-secondary">Runtime:</span> ${
       movie.runtime
     } minutes</li>
