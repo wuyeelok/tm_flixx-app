@@ -124,7 +124,7 @@ async function displayMovieDetails() {
   <h2>${movie.title}</h2>
   <p>
     <i class="fas fa-star text-primary"></i>
-    ${Number(movie.vote_average).toFixed(0)} / 10
+    ${movie.vote_average.toFixed(1)} / 10
   </p>
   <p class="text-muted">Release Date: ${releaseDate}</p>
   <p>${movie.overview}</p>
