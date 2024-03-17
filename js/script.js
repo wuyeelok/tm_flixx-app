@@ -132,15 +132,9 @@ async function displayMovieDetails() {
 </div>`;
   document.getElementById("movie-details").appendChild(movieDetailsTopEle);
 
-  let prodCompaniesNames = "";
-  const prodCompanies = movie.production_companies;
-  for (let i = 0; i < prodCompanies.length; i++) {
-    if (i + 1 === prodCompanies.length) {
-      prodCompaniesNames += prodCompanies[i].name;
-    } else {
-      prodCompaniesNames += prodCompanies[i].name + ", ";
-    }
-  }
+  const prodCompaniesNames = movie.production_companies
+    .map((company) => `<span>${company.name}</span>`)
+    .join(", ");
 
   const movieDetailsBottomEle = document.createElement("div");
   movieDetailsBottomEle.classList.add("details-bottom");
