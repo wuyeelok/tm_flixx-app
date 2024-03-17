@@ -154,16 +154,6 @@ async function displayMovieDetails() {
   <h4>Production Companies</h4>
   <div class="list-group">${prodCompaniesNames}</div>`;
   document.getElementById("movie-details").appendChild(movieDetailsBottomEle);
-
-  /* if (movieDetailsObj.backdrop_path) {
-    document.querySelector(
-      "body"
-    ).style.backgroundImage = `url(${global.API_BACKDROP_URL}${movieDetailsObj.backdrop_path})`;
-    document.querySelector("body").style.backgroundOrigin = "content-box";
-    document.querySelector("body").style.backgroundPosition = "center";
-    document.querySelector("body").style.backgroundRepeat = "no-repeat";
-    document.querySelector("body").style.backgroundSize = "cover";
-  } */
 }
 
 // Get data from TMDB API
