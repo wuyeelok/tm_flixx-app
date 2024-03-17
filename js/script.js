@@ -100,11 +100,7 @@ async function displayMovieDetails() {
     day: "2-digit",
   }).format(new Date(movie.release_date));
 
-  let genresHTML = "";
-  const genres = movie.genres;
-  genres.forEach((genre) => {
-    genresHTML += `<li>${genre.name}</li>`;
-  });
+  const genres = movie.genres.map((genre) => `<li>${genre.name}</li>`).join("");
 
   let homepageURL = "#";
   if (movie.homepage) {
@@ -130,7 +126,7 @@ async function displayMovieDetails() {
   <p>${movie.overview}</p>
   <h5>Genres</h5>
   <ul class="list-group">
-    ${genresHTML}
+    ${genres}
   </ul>
   <a href="${homepageURL}" target="_blank" class="btn">Visit Movie Homepage</a>
 </div>`;
