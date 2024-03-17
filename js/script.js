@@ -89,6 +89,11 @@ async function displayMovieDetails() {
 
   const movie = await fetchAPIData(`movie/${movieId}`);
 
+  // Overlay for background image
+  if (movie.backdrop_path) {
+    displayBackgroundImage("movie", movie.backdrop_path);
+  }
+
   let imageSrc = "images/no-image.jpg";
   if (movie.poster_path) {
     imageSrc = `${global.API_POSTER_URL}${movie.poster_path}`;
@@ -154,6 +159,27 @@ async function displayMovieDetails() {
   <h4>Production Companies</h4>
   <div class="list-group">${prodCompaniesNames}</div>`;
   document.getElementById("movie-details").appendChild(movieDetailsBottomEle);
+}
+
+function displayBackgroundImage(type, backdroundPath) {
+  const overlayDiv = document.createElement("div");
+  overlayDiv.style.backgroundImage = `url(${global.API_BACKDROP_URL}${backdroundPath})`;
+  overlayDiv.style.backgroundSize = "cover";
+  overlayDiv.style.backgroundPosition = "center";
+  overlayDiv.style.backgroundRepeat = "no-repeat";
+  overlayDiv.style.height = "100vh";
+  overlayDiv.style.width = "100vw";
+  overlayDiv.style.position = "absolute";
+  overlayDiv.style.top = "0";
+  overlayDiv.style.left = "0";
+  overlayDiv.style.zIndex = "-1";
+  overlayDiv.style.opacity = "0.2";
+
+  if (type === "movie") {
+    document.getElementById("movie-details").appendChild(overlayDiv);
+  } else if (type === "show") {
+    document.getElementById("show-details").appendChild(overlayDiv);
+  }
 }
 
 // Get data from TMDB API
