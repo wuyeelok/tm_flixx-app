@@ -161,6 +161,77 @@ async function displayMovieDetails() {
   document.getElementById("movie-details").appendChild(movieDetailsBottomEle);
 }
 
+async function displayShowDetails() {
+  const urlParamObj = new URLSearchParams(window.location.search);
+  const showId = urlParamObj.get("id");
+
+  const show = await fetchAPIData(`tv/${showId}`);
+
+  // Overlay for background image
+  if (show.backdrop_path) {
+    displayBackgroundImage("show", show.backdrop_path);
+  }
+
+  let imageSrc = "images/no-image.jpg";
+  if (show.poster_path) {
+    imageSrc = `${global.API_POSTER_URL}${show.poster_path}`;
+  }
+
+  const firstAirDate = new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date(show.first_air_date));
+
+  const genres = show.genres.map((genre) => `<li>${genre.name}</li>`).join("");
+
+  let homepageURL = "#";
+  if (show.homepage) {
+    homepageURL = show.homepage;
+  }
+
+  const showDetailsTopEle = document.createElement("div");
+  showDetailsTopEle.classList.add("details-top");
+  showDetailsTopEle.innerHTML = `<div>
+  <img
+    src="${imageSrc}"
+    class="card-img-top"
+    alt="${show.name}"
+  />
+</div>
+<div>
+  <h2>${show.name}</h2>
+  <p>
+    <i class="fas fa-star text-primary"></i>
+    ${show.vote_average.toFixed(1)} / 10
+  </p>
+  <p class="text-muted">Release Date: ${firstAirDate}</p>
+  <p>${show.overview}</p>
+  <h5>Genres</h5>
+  <ul class="list-group">${genres}</ul>
+  <a href="${homepageURL}" target="_blank" class="btn">Visit Show Homepage</a>
+</div>`;
+  document.getElementById("show-details").appendChild(showDetailsTopEle);
+
+  const prodCompaniesNames = show.production_companies
+    .map((company) => `<span>${company.name}</span>`)
+    .join(", ");
+
+  const showDetailsBottomEle = document.createElement("div");
+  showDetailsBottomEle.classList.add("details-bottom");
+  showDetailsBottomEle.innerHTML = `<h2>Show Info</h2>
+  <ul>
+    <li><span class="text-secondary">Number Of Episodes:</span> ${show.number_of_episodes}</li>
+    <li>
+      <span class="text-secondary">Last Episode To Air:</span> ${show.last_episode_to_air.name}
+    </li>
+    <li><span class="text-secondary">Status:</span> ${show.status}</li>
+  </ul>
+  <h4>Production Companies</h4>
+  <div class="list-group">${prodCompaniesNames}</div>`;
+  document.getElementById("show-details").appendChild(showDetailsBottomEle);
+}
+
 function displayBackgroundImage(type, backdroundPath) {
   const overlayDiv = document.createElement("div");
   overlayDiv.style.backgroundImage = `url(${global.API_BACKDROP_URL}${backdroundPath})`;
@@ -275,7 +346,7 @@ function init() {
       displayPopularShows();
       break;
     case "tv-details.html":
-      console.log("TV Details");
+      displayShowDetails();
       break;
     default:
       console.log("Unkown Page");
