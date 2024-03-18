@@ -253,6 +253,31 @@ function displayBackgroundImage(type, backdroundPath) {
   }
 }
 
+async function displaySlider() {
+  const { results } = await fetchAPIData("movie/now_playing");
+
+  for (const movie of results) {
+    const slideEle = document.createElement("div");
+    slideEle.classList.add("swiper-slide");
+
+    const imageSrc = movie.poster_path
+      ? `${global.API_POSTER_URL}${movie.poster_path}`
+      : "./images/no-image.jpg";
+
+    slideEle.innerHTML = `
+            <a href="movie-details.html?id=${movie.id}">
+              <img src="${imageSrc}" alt="${movie.title}" />
+            </a>
+            <h4 class="swiper-rating">
+              <i class="fas fa-star text-secondary"></i> ${movie.vote_average.toFixed(
+                1
+              )} / 10
+            </h4>
+    `;
+    document.querySelector(".swiper-wrapper").appendChild(slideEle);
+  }
+}
+
 // Get data from TMDB API
 async function fetchAPIData(endpoint) {
   showSpinner();
@@ -334,6 +359,7 @@ function init() {
   switch (currentHTMLPage) {
     case "/":
     case "index.html":
+      displaySlider();
       displayPopularMovies();
       break;
     case "movie-details.html":
