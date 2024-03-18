@@ -7,6 +7,12 @@ const global = {
   API_URL: "https://api.themoviedb.org/3/",
   API_POSTER_URL: "https://image.tmdb.org/t/p/w500",
   API_BACKDROP_URL: "https://image.tmdb.org/t/p/original",
+  search: {
+    term: "",
+    type: "",
+    page: 1,
+    totoalP: 1,
+  },
 };
 
 async function displayPopularMovies() {
@@ -256,6 +262,20 @@ function displayBackgroundImage(type, backdroundPath) {
   }
 }
 
+async function search() {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  global.search.type = urlParams.get("type");
+  global.search.term = urlParams.get("search-term");
+
+  if (global.search.term !== "" && global.search.term !== null) {
+    const data = await searchAPIData();
+    console.log(data);
+  } else {
+    showAlert("Please enter a search!");
+  }
+}
+
 async function displaySlider() {
   const { results } = await fetchAPIData("movie/now_playing");
 
@@ -328,6 +348,31 @@ async function fetchAPIData(endpoint) {
   }
 }
 
+async function searchAPIData() {
+  showSpinner();
+
+  let type = "movie";
+  if (global.search.type) {
+    type = global.search.type;
+  }
+
+  const response = await fetch(
+    `${global.API_URL}search/${type}?language=en-US&api_key=${global.API_KEY}&query=${global.search.term}`
+  );
+  try {
+    if (!response.ok) {
+      throw new Error("Can not get search result");
+    }
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    console.log(err);
+  } finally {
+    hideSpinner();
+  }
+}
+
 function showSpinner() {
   const spinner = document.querySelector(".spinner");
   spinner.classList.add("show");
@@ -378,6 +423,18 @@ function highlightActiveLink() {
   }
 }
 
+function showAlert(message, className) {
+  const alertEl = document.createElement("div");
+  alertEl.classList.add("alert", className);
+  alertEl.innerText = message;
+
+  const alertDiv = document.getElementById("alert");
+  alertDiv.appendChild(alertEl);
+  setTimeout(() => {
+    alertEl.remove();
+  }, 3000);
+}
+
 function addCommasToNumber(number) {
   return number.toLocaleString("en-US");
 }
@@ -395,7 +452,7 @@ function init() {
       displayMovieDetails();
       break;
     case "search.html":
-      console.log("Search");
+      search();
       break;
     case "shows.html":
       displayPopularShows();
