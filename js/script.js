@@ -11,7 +11,7 @@ const global = {
     term: "",
     type: "",
     page: 1,
-    totoalP: 1,
+    totalPages: 1,
   },
 };
 
@@ -262,6 +262,52 @@ function displayBackgroundImage(type, backdroundPath) {
   }
 }
 
+function displaySearchResults(data) {
+  data.results.forEach((searchResult) => {
+    const div = document.createElement("div");
+    div.classList.add("card");
+
+    let detailsHref = "";
+    let releaseDate = "";
+    let title = "";
+    if (global.search.type === "movie") {
+      detailsHref = `./movie-details.html?id=${searchResult.id}`;
+      releaseDate = new Intl.DateTimeFormat("en-US", {
+        year: "2-digit",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(new Date(searchResult.release_date));
+      title = searchResult.title;
+    } else if (global.search.type === "tv") {
+      detailsHref = `./tv-details.html?id=${searchResult.id}`;
+      releaseDate = new Intl.DateTimeFormat("en-US", {
+        year: "2-digit",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(new Date(searchResult.first_air_date));
+      title = searchResult.name;
+    }
+
+    const imageSrc = searchResult.poster_path
+      ? `${global.API_POSTER_URL}${searchResult.poster_path}`
+      : "images/no-image.jpg";
+
+    div.innerHTML = `
+    <a href="${detailsHref}">
+      <img src="${imageSrc}" class="card-img-top" alt="${title}" />
+    </a>
+    <div class="card-body">
+      <h5 class="card-title">${title}</h5>
+      <p class="card-text">
+        <small class="text-muted">Release: ${releaseDate}</small>
+      </p>
+    </div>
+    `;
+
+    document.getElementById("search-results").appendChild(div);
+  });
+}
+
 async function search() {
   const urlParams = new URLSearchParams(window.location.search);
 
@@ -272,7 +318,9 @@ async function search() {
     const data = await searchAPIData();
     console.log(data);
     if (data.total_results > 0) {
-      // TODO display search results in DOM
+      global.search.page = data.page;
+      global.search.totalPages = data.total_results;
+      displaySearchResults(data);
     } else {
       showAlert("No search result, please try other search.");
     }
