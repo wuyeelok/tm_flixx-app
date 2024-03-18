@@ -1,3 +1,5 @@
+import Swiper from "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs";
+
 const global = {
   currentPage: getCurrentPageHTMLFilePath(),
   API_KEY: "7afb6867335b56cd49dfc5b14c686f20",
