@@ -271,6 +271,11 @@ async function search() {
   if (global.search.term !== "" && global.search.term !== null) {
     const data = await searchAPIData();
     console.log(data);
+    if (data.total_results > 0) {
+      // TODO display search results in DOM
+    } else {
+      showAlert("No search result, please try other search.");
+    }
   } else {
     showAlert("Please enter a search!");
   }
