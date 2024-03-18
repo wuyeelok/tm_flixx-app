@@ -314,6 +314,12 @@ async function search() {
   global.search.type = urlParams.get("type");
   global.search.term = urlParams.get("search-term");
 
+  if (urlParams.get("type") === "movie") {
+    document.getElementById("movie").checked = true;
+  } else if (urlParams.get("type") === "tv") {
+    document.getElementById("tv").checked = true;
+  }
+
   if (global.search.term !== "" && global.search.term !== null) {
     const data = await searchAPIData();
     console.log(data);
