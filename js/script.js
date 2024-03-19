@@ -299,19 +299,25 @@ function displaySearchResults(results) {
     let title = "";
     if (global.search.type === "movie") {
       detailsHref = `./movie-details.html?id=${searchResult.id}`;
-      releaseDate = new Intl.DateTimeFormat("en-US", {
-        year: "2-digit",
-        month: "2-digit",
-        day: "2-digit",
-      }).format(new Date(searchResult.release_date));
+
+      if (searchResult.release_date) {
+        releaseDate = new Intl.DateTimeFormat("en-US", {
+          year: "2-digit",
+          month: "2-digit",
+          day: "2-digit",
+        }).format(new Date(searchResult.release_date));
+      }
       title = searchResult.title;
     } else if (global.search.type === "tv") {
       detailsHref = `./tv-details.html?id=${searchResult.id}`;
-      releaseDate = new Intl.DateTimeFormat("en-US", {
-        year: "2-digit",
-        month: "2-digit",
-        day: "2-digit",
-      }).format(new Date(searchResult.first_air_date));
+
+      if (searchResult.first_air_date) {
+        releaseDate = new Intl.DateTimeFormat("en-US", {
+          year: "2-digit",
+          month: "2-digit",
+          day: "2-digit",
+        }).format(new Date(searchResult.first_air_date));
+      }
       title = searchResult.name;
     }
 
