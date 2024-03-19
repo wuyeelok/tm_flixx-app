@@ -262,8 +262,35 @@ function displayBackgroundImage(type, backdroundPath) {
   }
 }
 
-function displaySearchResults(data) {
-  data.results.forEach((searchResult) => {
+async function search() {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  global.search.type = urlParams.get("type");
+  global.search.term = urlParams.get("search-term");
+
+  if (urlParams.get("type") === "movie") {
+    document.getElementById("movie").checked = true;
+  } else if (urlParams.get("type") === "tv") {
+    document.getElementById("tv").checked = true;
+  }
+
+  if (global.search.term !== "" && global.search.term !== null) {
+    const { results, total_results, page } = await searchAPIData();
+
+    if (total_results > 0) {
+      global.search.page = page;
+      global.search.totalPages = total_results;
+      displaySearchResults(results);
+    } else {
+      showAlert("No search result, please try other search.");
+    }
+  } else {
+    showAlert("Please enter a search!");
+  }
+}
+
+function displaySearchResults(results) {
+  results.forEach((result) => {
     const div = document.createElement("div");
     div.classList.add("card");
 
@@ -271,25 +298,31 @@ function displaySearchResults(data) {
     let releaseDate = "";
     let title = "";
     if (global.search.type === "movie") {
-      detailsHref = `./movie-details.html?id=${searchResult.id}`;
-      releaseDate = new Intl.DateTimeFormat("en-US", {
-        year: "2-digit",
-        month: "2-digit",
-        day: "2-digit",
-      }).format(new Date(searchResult.release_date));
-      title = searchResult.title;
+      detailsHref = `./movie-details.html?id=${result.id}`;
+
+      if (result.release_date) {
+        releaseDate = new Intl.DateTimeFormat("en-US", {
+          year: "2-digit",
+          month: "2-digit",
+          day: "2-digit",
+        }).format(new Date(result.release_date));
+      }
+      title = result.title;
     } else if (global.search.type === "tv") {
-      detailsHref = `./tv-details.html?id=${searchResult.id}`;
-      releaseDate = new Intl.DateTimeFormat("en-US", {
-        year: "2-digit",
-        month: "2-digit",
-        day: "2-digit",
-      }).format(new Date(searchResult.first_air_date));
-      title = searchResult.name;
+      detailsHref = `./tv-details.html?id=${result.id}`;
+
+      if (result.first_air_date) {
+        releaseDate = new Intl.DateTimeFormat("en-US", {
+          year: "2-digit",
+          month: "2-digit",
+          day: "2-digit",
+        }).format(new Date(result.first_air_date));
+      }
+      title = result.name;
     }
 
-    const imageSrc = searchResult.poster_path
-      ? `${global.API_POSTER_URL}${searchResult.poster_path}`
+    const imageSrc = result.poster_path
+      ? `${global.API_POSTER_URL}${result.poster_path}`
       : "images/no-image.jpg";
 
     div.innerHTML = `
@@ -306,33 +339,6 @@ function displaySearchResults(data) {
 
     document.getElementById("search-results").appendChild(div);
   });
-}
-
-async function search() {
-  const urlParams = new URLSearchParams(window.location.search);
-
-  global.search.type = urlParams.get("type");
-  global.search.term = urlParams.get("search-term");
-
-  if (urlParams.get("type") === "movie") {
-    document.getElementById("movie").checked = true;
-  } else if (urlParams.get("type") === "tv") {
-    document.getElementById("tv").checked = true;
-  }
-
-  if (global.search.term !== "" && global.search.term !== null) {
-    const data = await searchAPIData();
-    console.log(data);
-    if (data.total_results > 0) {
-      global.search.page = data.page;
-      global.search.totalPages = data.total_results;
-      displaySearchResults(data);
-    } else {
-      showAlert("No search result, please try other search.");
-    }
-  } else {
-    showAlert("Please enter a search!");
-  }
 }
 
 async function displaySlider() {
@@ -482,7 +488,7 @@ function highlightActiveLink() {
   }
 }
 
-function showAlert(message, className) {
+function showAlert(message, className = "alert-error") {
   const alertEl = document.createElement("div");
   alertEl.classList.add("alert", className);
   alertEl.innerText = message;
