@@ -262,8 +262,8 @@ function displayBackgroundImage(type, backdroundPath) {
   }
 }
 
-function displaySearchResults(data) {
-  data.results.forEach((searchResult) => {
+function displaySearchResults(results) {
+  results.forEach((searchResult) => {
     const div = document.createElement("div");
     div.classList.add("card");
 
@@ -321,12 +321,12 @@ async function search() {
   }
 
   if (global.search.term !== "" && global.search.term !== null) {
-    const data = await searchAPIData();
-    console.log(data);
-    if (data.total_results > 0) {
-      global.search.page = data.page;
-      global.search.totalPages = data.total_results;
-      displaySearchResults(data);
+    const { results, total_results, page } = await searchAPIData();
+
+    if (total_results > 0) {
+      global.search.page = page;
+      global.search.totalPages = total_results;
+      displaySearchResults(results);
     } else {
       showAlert("No search result, please try other search.");
     }
@@ -482,7 +482,7 @@ function highlightActiveLink() {
   }
 }
 
-function showAlert(message, className) {
+function showAlert(message, className = "alert-error") {
   const alertEl = document.createElement("div");
   alertEl.classList.add("alert", className);
   alertEl.innerText = message;
