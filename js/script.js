@@ -290,7 +290,7 @@ async function search() {
 }
 
 function displaySearchResults(results) {
-  results.forEach((searchResult) => {
+  results.forEach((result) => {
     const div = document.createElement("div");
     div.classList.add("card");
 
@@ -298,31 +298,31 @@ function displaySearchResults(results) {
     let releaseDate = "";
     let title = "";
     if (global.search.type === "movie") {
-      detailsHref = `./movie-details.html?id=${searchResult.id}`;
+      detailsHref = `./movie-details.html?id=${result.id}`;
 
-      if (searchResult.release_date) {
+      if (result.release_date) {
         releaseDate = new Intl.DateTimeFormat("en-US", {
           year: "2-digit",
           month: "2-digit",
           day: "2-digit",
-        }).format(new Date(searchResult.release_date));
+        }).format(new Date(result.release_date));
       }
-      title = searchResult.title;
+      title = result.title;
     } else if (global.search.type === "tv") {
-      detailsHref = `./tv-details.html?id=${searchResult.id}`;
+      detailsHref = `./tv-details.html?id=${result.id}`;
 
-      if (searchResult.first_air_date) {
+      if (result.first_air_date) {
         releaseDate = new Intl.DateTimeFormat("en-US", {
           year: "2-digit",
           month: "2-digit",
           day: "2-digit",
-        }).format(new Date(searchResult.first_air_date));
+        }).format(new Date(result.first_air_date));
       }
-      title = searchResult.name;
+      title = result.name;
     }
 
-    const imageSrc = searchResult.poster_path
-      ? `${global.API_POSTER_URL}${searchResult.poster_path}`
+    const imageSrc = result.poster_path
+      ? `${global.API_POSTER_URL}${result.poster_path}`
       : "images/no-image.jpg";
 
     div.innerHTML = `
