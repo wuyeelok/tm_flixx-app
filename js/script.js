@@ -262,6 +262,33 @@ function displayBackgroundImage(type, backdroundPath) {
   }
 }
 
+async function search() {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  global.search.type = urlParams.get("type");
+  global.search.term = urlParams.get("search-term");
+
+  if (urlParams.get("type") === "movie") {
+    document.getElementById("movie").checked = true;
+  } else if (urlParams.get("type") === "tv") {
+    document.getElementById("tv").checked = true;
+  }
+
+  if (global.search.term !== "" && global.search.term !== null) {
+    const { results, total_results, page } = await searchAPIData();
+
+    if (total_results > 0) {
+      global.search.page = page;
+      global.search.totalPages = total_results;
+      displaySearchResults(results);
+    } else {
+      showAlert("No search result, please try other search.");
+    }
+  } else {
+    showAlert("Please enter a search!");
+  }
+}
+
 function displaySearchResults(results) {
   results.forEach((searchResult) => {
     const div = document.createElement("div");
@@ -306,33 +333,6 @@ function displaySearchResults(results) {
 
     document.getElementById("search-results").appendChild(div);
   });
-}
-
-async function search() {
-  const urlParams = new URLSearchParams(window.location.search);
-
-  global.search.type = urlParams.get("type");
-  global.search.term = urlParams.get("search-term");
-
-  if (urlParams.get("type") === "movie") {
-    document.getElementById("movie").checked = true;
-  } else if (urlParams.get("type") === "tv") {
-    document.getElementById("tv").checked = true;
-  }
-
-  if (global.search.term !== "" && global.search.term !== null) {
-    const { results, total_results, page } = await searchAPIData();
-
-    if (total_results > 0) {
-      global.search.page = page;
-      global.search.totalPages = total_results;
-      displaySearchResults(results);
-    } else {
-      showAlert("No search result, please try other search.");
-    }
-  } else {
-    showAlert("Please enter a search!");
-  }
 }
 
 async function displaySlider() {
