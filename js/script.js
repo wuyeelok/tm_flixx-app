@@ -283,6 +283,7 @@ async function search() {
       displaySearchResults(results);
     } else {
       showAlert("No search result, please try other search.");
+      document.getElementById("pagination").style.display = "none";
     }
   } else {
     showAlert("Please enter a search!");
