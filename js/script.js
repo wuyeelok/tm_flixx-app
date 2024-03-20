@@ -268,6 +268,8 @@ async function search() {
   global.search.type = urlParams.get("type");
   global.search.term = urlParams.get("search-term");
 
+  const urlPage = urlParams.get("page") ? urlParams.get("page") : 1;
+
   if (urlParams.get("type") === "movie") {
     document.getElementById("movie").checked = true;
   } else if (urlParams.get("type") === "tv") {
@@ -275,7 +277,9 @@ async function search() {
   }
 
   if (global.search.term !== "" && global.search.term !== null) {
-    const { results, total_results, page, total_pages } = await searchAPIData();
+    const { results, total_results, page, total_pages } = await searchAPIData(
+      urlPage
+    );
 
     if (total_results > 0) {
       global.search.page = page;
@@ -350,11 +354,24 @@ function displayPagination() {
   const prevBtn = document.getElementById("prev");
   const nextBtn = document.getElementById("next");
 
-  if (global.search.totalPages > 1) {
-  } else {
+  prevBtn.addEventListener("click", () => {
+    window.location.href = constructSearchUrl(global.search.page - 1);
+  });
+  nextBtn.addEventListener("click", () => {
+    window.location.href = constructSearchUrl(global.search.page + 1);
+  });
+
+  if (global.search.page === 1) {
     prevBtn.disabled = true;
+  }
+
+  if (global.search.page === global.search.totalPages) {
     nextBtn.disabled = true;
   }
+}
+
+function constructSearchUrl(page) {
+  return `./search.html?type=${global.search.type}&search-term=${global.search.term}&page=${page}`;
 }
 
 async function displaySlider() {
@@ -429,7 +446,7 @@ async function fetchAPIData(endpoint) {
   }
 }
 
-async function searchAPIData() {
+async function searchAPIData(page = 1) {
   showSpinner();
 
   let type = "movie";
@@ -438,7 +455,7 @@ async function searchAPIData() {
   }
 
   const response = await fetch(
-    `${global.API_URL}search/${type}?language=en-US&api_key=${global.API_KEY}&query=${global.search.term}`
+    `${global.API_URL}search/${type}?language=en-US&api_key=${global.API_KEY}&query=${global.search.term}&page=${page}`
   );
   try {
     if (!response.ok) {
