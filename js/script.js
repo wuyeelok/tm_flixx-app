@@ -12,6 +12,7 @@ const global = {
     type: "",
     page: 1,
     totalPages: 1,
+    totalResults: 0,
   },
 };
 
@@ -268,6 +269,8 @@ async function search() {
   global.search.type = urlParams.get("type");
   global.search.term = urlParams.get("search-term");
 
+  const urlPage = urlParams.get("page") ? urlParams.get("page") : 1;
+
   if (urlParams.get("type") === "movie") {
     document.getElementById("movie").checked = true;
   } else if (urlParams.get("type") === "tv") {
@@ -275,14 +278,18 @@ async function search() {
   }
 
   if (global.search.term !== "" && global.search.term !== null) {
-    const { results, total_results, page } = await searchAPIData();
+    const { results, total_results, page, total_pages } = await searchAPIData(
+      urlPage
+    );
 
     if (total_results > 0) {
       global.search.page = page;
-      global.search.totalPages = total_results;
+      global.search.totalPages = total_pages;
+      global.search.totalResults = total_results;
       displaySearchResults(results);
     } else {
       showAlert("No search result, please try other search.");
+      document.getElementById("pagination").innerHTML = "";
     }
   } else {
     showAlert("Please enter a search!");
@@ -337,8 +344,40 @@ function displaySearchResults(results) {
     </div>
     `;
 
+    document.getElementById("search-results-heading").innerHTML = `
+      <h2>${results.length} of ${global.search.totalResults} Results for ${global.search.term}</h2>
+    `;
     document.getElementById("search-results").appendChild(div);
   });
+
+  displayPagination();
+}
+
+function displayPagination() {
+  const pageCounter = document.querySelector("#pagination .page-counter");
+  pageCounter.innerText = `Page ${global.search.page} of ${global.search.totalPages}`;
+
+  const prevBtn = document.getElementById("prev");
+  const nextBtn = document.getElementById("next");
+
+  prevBtn.addEventListener("click", () => {
+    window.location.href = constructSearchUrl(global.search.page - 1);
+  });
+  nextBtn.addEventListener("click", () => {
+    window.location.href = constructSearchUrl(global.search.page + 1);
+  });
+
+  if (global.search.page === 1) {
+    prevBtn.disabled = true;
+  }
+
+  if (global.search.page === global.search.totalPages) {
+    nextBtn.disabled = true;
+  }
+}
+
+function constructSearchUrl(page) {
+  return `./search.html?type=${global.search.type}&search-term=${global.search.term}&page=${page}`;
 }
 
 async function displaySlider() {
@@ -413,7 +452,7 @@ async function fetchAPIData(endpoint) {
   }
 }
 
-async function searchAPIData() {
+async function searchAPIData(page = 1) {
   showSpinner();
 
   let type = "movie";
@@ -422,7 +461,7 @@ async function searchAPIData() {
   }
 
   const response = await fetch(
-    `${global.API_URL}search/${type}?language=en-US&api_key=${global.API_KEY}&query=${global.search.term}`
+    `${global.API_URL}search/${type}?language=en-US&api_key=${global.API_KEY}&query=${global.search.term}&page=${page}`
   );
   try {
     if (!response.ok) {
