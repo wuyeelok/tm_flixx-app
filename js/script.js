@@ -281,6 +281,7 @@ async function search() {
       global.search.page = page;
       global.search.totalPages = total_results;
       displaySearchResults(results);
+      displayPagination();
     } else {
       showAlert("No search result, please try other search.");
       document.getElementById("pagination").style.display = "none";
@@ -340,6 +341,11 @@ function displaySearchResults(results) {
 
     document.getElementById("search-results").appendChild(div);
   });
+}
+
+function displayPagination() {
+  const pageCounter = document.querySelector("#pagination .page-counter");
+  pageCounter.innerText = `Page ${global.search.page} of ${global.search.totalPages}`;
 }
 
 async function displaySlider() {
