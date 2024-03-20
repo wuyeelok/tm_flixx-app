@@ -287,10 +287,9 @@ async function search() {
       global.search.totalPages = total_pages;
       global.search.totalResults = total_results;
       displaySearchResults(results);
-      displayPagination();
     } else {
       showAlert("No search result, please try other search.");
-      document.getElementById("pagination").style.display = "none";
+      document.getElementById("pagination").innerHTML = "";
     }
   } else {
     showAlert("Please enter a search!");
@@ -350,6 +349,8 @@ function displaySearchResults(results) {
     `;
     document.getElementById("search-results").appendChild(div);
   });
+
+  displayPagination();
 }
 
 function displayPagination() {
