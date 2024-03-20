@@ -275,11 +275,11 @@ async function search() {
   }
 
   if (global.search.term !== "" && global.search.term !== null) {
-    const { results, total_results, page } = await searchAPIData();
+    const { results, total_results, page, total_pages } = await searchAPIData();
 
     if (total_results > 0) {
       global.search.page = page;
-      global.search.totalPages = total_results;
+      global.search.totalPages = total_pages;
       displaySearchResults(results);
       displayPagination();
     } else {
@@ -346,6 +346,15 @@ function displaySearchResults(results) {
 function displayPagination() {
   const pageCounter = document.querySelector("#pagination .page-counter");
   pageCounter.innerText = `Page ${global.search.page} of ${global.search.totalPages}`;
+
+  const prevBtn = document.getElementById("prev");
+  const nextBtn = document.getElementById("next");
+
+  if (global.search.totalPages > 1) {
+  } else {
+    prevBtn.disabled = true;
+    nextBtn.disabled = true;
+  }
 }
 
 async function displaySlider() {
