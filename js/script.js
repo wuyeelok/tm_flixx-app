@@ -268,8 +268,7 @@ async function search() {
 
   global.search.type = urlParams.get("type");
   global.search.term = urlParams.get("search-term");
-
-  const urlPage = urlParams.get("page") ? urlParams.get("page") : 1;
+  global.search.page = urlParams.get("page") ? urlParams.get("page") : 1;
 
   if (urlParams.get("type") === "movie") {
     document.getElementById("movie").checked = true;
@@ -278,9 +277,7 @@ async function search() {
   }
 
   if (global.search.term !== "" && global.search.term !== null) {
-    const { results, total_results, page, total_pages } = await searchAPIData(
-      urlPage
-    );
+    const { results, total_results, page, total_pages } = await searchAPIData();
 
     if (total_results > 0) {
       global.search.page = page;
@@ -368,37 +365,23 @@ function displayPagination() {
 
   prevBtn.addEventListener("click", async () => {
     // window.location.href = constructSearchUrl(global.search.page - 1);
-
-    const { results, total_results, page, total_pages } = await searchAPIData(
-      global.search.page - 1
-    );
-    global.search.page = page;
-    global.search.totalPages = total_pages;
-    global.search.totalResults = total_results;
+    global.search.page--;
+    const { results } = await searchAPIData();
     displaySearchResults(results);
   });
   nextBtn.addEventListener("click", async () => {
     // window.location.href = constructSearchUrl(global.search.page + 1);
-
-    const { results, total_results, page, total_pages } = await searchAPIData(
-      global.search.page + 1
-    );
-    global.search.page = page;
-    global.search.totalPages = total_pages;
-    global.search.totalResults = total_results;
+    global.search.page++;
+    const { results } = await searchAPIData();
     displaySearchResults(results);
   });
 
   if (global.search.page === 1) {
     prevBtn.disabled = true;
-  } else {
-    prevBtn.disabled = false;
   }
 
   if (global.search.page === global.search.totalPages) {
     nextBtn.disabled = true;
-  } else {
-    nextBtn.disabled = false;
   }
 }
 
@@ -478,7 +461,7 @@ async function fetchAPIData(endpoint) {
   }
 }
 
-async function searchAPIData(page = 1) {
+async function searchAPIData() {
   showSpinner();
 
   let type = "movie";
@@ -487,7 +470,7 @@ async function searchAPIData(page = 1) {
   }
 
   const response = await fetch(
-    `${global.API_URL}search/${type}?language=en-US&api_key=${global.API_KEY}&query=${global.search.term}&page=${page}`
+    `${global.API_URL}search/${type}?language=en-US&api_key=${global.API_KEY}&query=${global.search.term}&page=${global.search.page}`
   );
   try {
     if (!response.ok) {
