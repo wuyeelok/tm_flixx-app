@@ -12,6 +12,7 @@ const global = {
     type: "",
     page: 1,
     totalPages: 1,
+    totalResults: 0,
   },
 };
 
@@ -284,6 +285,7 @@ async function search() {
     if (total_results > 0) {
       global.search.page = page;
       global.search.totalPages = total_pages;
+      global.search.totalResults = total_results;
       displaySearchResults(results);
       displayPagination();
     } else {
@@ -343,6 +345,9 @@ function displaySearchResults(results) {
     </div>
     `;
 
+    document.getElementById("search-results-heading").innerHTML = `
+      <h2>${results.length} of ${global.search.totalResults} Results for ${global.search.term}</h2>
+    `;
     document.getElementById("search-results").appendChild(div);
   });
 }
