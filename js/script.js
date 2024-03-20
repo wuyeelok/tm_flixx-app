@@ -289,7 +289,6 @@ async function search() {
       displaySearchResults(results);
     } else {
       showAlert("No search result, please try other search.");
-      document.getElementById("pagination").innerHTML = "";
     }
   } else {
     showAlert("Please enter a search!");
@@ -297,6 +296,8 @@ async function search() {
 }
 
 function displaySearchResults(results) {
+  document.getElementById("search-results").innerHTML = "";
+
   results.forEach((result) => {
     const div = document.createElement("div");
     div.classList.add("card");
@@ -354,25 +355,50 @@ function displaySearchResults(results) {
 }
 
 function displayPagination() {
-  const pageCounter = document.querySelector("#pagination .page-counter");
-  pageCounter.innerText = `Page ${global.search.page} of ${global.search.totalPages}`;
+  document.getElementById("pagination").innerHTML = `
+  <div class="pagination">
+    <button class="btn btn-primary" id="prev">Prev</button>
+    <button class="btn btn-primary" id="next">Next</button>
+    <div class="page-counter">Page ${global.search.page} of ${global.search.totalPages}</div>
+  </div>  
+  `;
 
   const prevBtn = document.getElementById("prev");
   const nextBtn = document.getElementById("next");
 
-  prevBtn.addEventListener("click", () => {
-    window.location.href = constructSearchUrl(global.search.page - 1);
+  prevBtn.addEventListener("click", async () => {
+    // window.location.href = constructSearchUrl(global.search.page - 1);
+
+    const { results, total_results, page, total_pages } = await searchAPIData(
+      global.search.page - 1
+    );
+    global.search.page = page;
+    global.search.totalPages = total_pages;
+    global.search.totalResults = total_results;
+    displaySearchResults(results);
   });
-  nextBtn.addEventListener("click", () => {
-    window.location.href = constructSearchUrl(global.search.page + 1);
+  nextBtn.addEventListener("click", async () => {
+    // window.location.href = constructSearchUrl(global.search.page + 1);
+
+    const { results, total_results, page, total_pages } = await searchAPIData(
+      global.search.page + 1
+    );
+    global.search.page = page;
+    global.search.totalPages = total_pages;
+    global.search.totalResults = total_results;
+    displaySearchResults(results);
   });
 
   if (global.search.page === 1) {
     prevBtn.disabled = true;
+  } else {
+    prevBtn.disabled = false;
   }
 
   if (global.search.page === global.search.totalPages) {
     nextBtn.disabled = true;
+  } else {
+    nextBtn.disabled = false;
   }
 }
 
