@@ -1,6 +1,6 @@
-# TM Flixx APP
+# Small Movie Database(Catalog) Webiste
 
-A _movie catalog website_ that used [The Movie Database (TMDB) API](https://developer.themoviedb.org/reference/intro/getting-started) based on Traversy Media _Modern JavaScript From The Beginning 2.0_ [Section 11 Project](https://www.traversymedia.com/products/modern-javascript-from-the-beginning-2-0/categories/2152233626/posts/2165170634).
+A _movie catalog website_ that used [The Movie Database (TMDB) API](https://developer.themoviedb.org/reference/intro/getting-started) referencing [Traversy Media \_Modern JavaScript From The Beginning 2.0](https://www.traversymedia.com/modern-javascript-2-0). Enhancements had been added for improvement.
 
 ## For Local Development
 
