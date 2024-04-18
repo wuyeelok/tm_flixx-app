@@ -1,6 +1,6 @@
-# Small Movie Database(Catalog) Webiste
+# Small Movies and TV Shows Catalog Website
 
-A _movie catalog website_ that used [The Movie Database (TMDB) API](https://developer.themoviedb.org/reference/intro/getting-started) referencing [Traversy Media \_Modern JavaScript From The Beginning 2.0](https://www.traversymedia.com/modern-javascript-2-0). Enhancements had been added for improvement.
+A _movies and tv shows catalog website_ that used [The Movie Database (TMDB) API](https://developer.themoviedb.org/reference/intro/getting-started) referencing [Traversy Media \_Modern JavaScript From The Beginning 2.0](https://www.traversymedia.com/modern-javascript-2-0). Enhancements had been added for improvement.
 
 ## For Local Development
 
