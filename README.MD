@@ -1,6 +1,6 @@
 # Small Movies and TV Shows Catalog Website
 
-This project is tested with BrowserStack
+This project is tested with BrowserStack.
 
 A _movies and tv shows catalog website_ that used [The Movie Database (TMDB) API](https://developer.themoviedb.org/reference/intro/getting-started) referencing [Traversy Media \_Modern JavaScript From The Beginning 2.0](https://www.traversymedia.com/modern-javascript-2-0). Enhancements had been added for improvement.
 
